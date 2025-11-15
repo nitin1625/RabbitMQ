@@ -7,11 +7,12 @@ connection = pika.BlockingConnection(connection_params)
 
 # Channel and queue declaration
 channel = connection.channel()
-channel.queue_declare(queue='letterbox')
+channel.exchange_declare(exchange='mytopicexchange',exchange_type=ExchangeType.topic)
 
 # Message creation and publish
-message = "Message Published."
-channel.basic_publish(exchange='', routing_key='letterbox', body=message)
+consumer="user.user"
+message = f"Message Published to {consumer}."
+channel.basic_publish(exchange='mytopicexchange', routing_key=consumer, body=message)
 print(f"Sent message: {message}")
 connection.close()
 
